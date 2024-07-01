@@ -44,6 +44,8 @@ class Particle {
         this.size = Math.random() * 15;
         this.speedX = Math.random() * 3 - 1.5;
         this.speedY = Math.random() * 3 - 1.5;
+
+        this.color = `hsl(${hue}, 100%, 50%)`;
     }
 
     update() {
@@ -55,7 +57,7 @@ class Particle {
     }
 
     draw() {
-        ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+        ctx.fillStyle = this.color;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill()
@@ -66,6 +68,21 @@ function handleParticles() {
     for (let x = 0; x < particles.length; x++) {
         particles[x].update();
         particles[x].draw();
+
+        for (let j = x; j < particles.length; j++) {
+            const dx = particles[x].x - particles[j].x;
+            const dy = particles[x].y - particles[j].y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance < 100) {
+                ctx.beginPath()
+                ctx.strokeStyle = particles[x].color;
+                ctx.lineWidth = particles[x].size / 10;
+                ctx.moveTo(particles[x].x, particles[x].y);
+                ctx.lineTo(particles[j].x, particles[j].y);
+                ctx.stroke();
+                ctx.closePath();
+            }
+        }
 
         if (particles[x].size <= 0.3) {
             particles.splice(x, 1);
@@ -79,7 +96,7 @@ function animate() {
     ctx.fillStyle = "rgba(0,0,0,0.5)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     handleParticles();
-    hue++;
+    hue += 2;
     requestAnimationFrame(animate);
 }
 
