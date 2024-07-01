@@ -28,6 +28,10 @@ canvas.addEventListener('click', (event) => {
 canvas.addEventListener('mousemove', (event) => {
     mouse.x = event.x;
     mouse.y = event.y;
+
+    for (let i = 0; i < 10; i++) {
+        particles.push(new Particle());
+    }
 });
 
 class Particle {
@@ -69,7 +73,9 @@ function handleParticles() {
 }
 
 function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "rgba(0,0,0,0.2)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
     handleParticles();
     requestAnimationFrame(animate);
 }
