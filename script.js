@@ -19,6 +19,10 @@ const mouse = {
 canvas.addEventListener('click', (event) => {
     mouse.x = event.x;
     mouse.y = event.y;
+
+    for (let i = 0; i < 10; i++) {
+        particles.push(new Particle());
+    }
 });
 
 canvas.addEventListener('mousemove', (event) => {
@@ -28,13 +32,10 @@ canvas.addEventListener('mousemove', (event) => {
 
 class Particle {
     constructor() {
-        // this.x = mouse.x;
-        // this.y = mouse.y
+        this.x = mouse.x;
+        this.y = mouse.y
 
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-
-        this.size = Math.random() + 6;
+        this.size = Math.random() * 15;
         this.speedX = Math.random() * 3 - 1.5;
         this.speedY = Math.random() * 3 - 1.5;
     }
@@ -42,7 +43,9 @@ class Particle {
     update() {
         this.x += this.speedX;
         this.y += this.speedY;
-
+        if (this.size > 0.2) {
+            this.size -= 0.1;
+        }
     }
 
     draw() {
@@ -53,22 +56,24 @@ class Particle {
     }
 }
 
-function init() {
-    for (let x = 0; x < 100; x++) {
-        particles.push(new Particle());
+function handleParticles() {
+    for (let x = 0; x < particles.length; x++) {
+        particles[x].update();
+        particles[x].draw();
+
+        if (particles[x].size <= 0.3) {
+            particles.splice(x, 1);
+            x--;
+        }
     }
 }
 
 function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (let x = 0; x < particles.length; x++) {
-        particles[x].update();
-        particles[x].draw();
-    }
+    handleParticles();
     requestAnimationFrame(animate);
 }
 
-init();
 animate();
 
 console.log(ctx);
