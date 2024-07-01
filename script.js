@@ -73,7 +73,7 @@ function handleParticles() {
             const dx = particles[x].x - particles[j].x;
             const dy = particles[x].y - particles[j].y;
             const distance = Math.sqrt(dx * dx + dy * dy);
-            if (distance < 100) {
+            if (distance < 50) {
                 ctx.beginPath()
                 ctx.strokeStyle = particles[x].color;
                 ctx.lineWidth = particles[x].size / 10;
